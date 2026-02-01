@@ -10,9 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_31_065825) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_01_035842) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "bookmarks", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.text "metadata_error"
+    t.string "metadata_status", default: "pending", null: false
+    t.string "thumbnail_url"
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.text "url", null: false
+    t.bigint "user_id", null: false
+    t.index ["created_at"], name: "index_bookmarks_on_created_at"
+    t.index ["user_id", "url"], name: "index_bookmarks_on_user_id_and_url", unique: true
+    t.index ["user_id"], name: "index_bookmarks_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -21,4 +36,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_31_065825) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
+
+  add_foreign_key "bookmarks", "users"
 end
